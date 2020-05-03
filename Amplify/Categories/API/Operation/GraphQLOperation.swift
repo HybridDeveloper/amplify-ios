@@ -7,13 +7,13 @@
 
 public typealias GraphQLOperation<R: Decodable> = AmplifyOperation<
     GraphQLOperationRequest<R>,
-    Void,
     GraphQLResponse<R>,
     APIError>
 
+// TODO: Figure out a publisher for SubscriptionEvent<GraphQLResponse<R>>. Subscription network level errors are the
+// Failure case of the Result; successful termination is a Result<Void>
 public typealias GraphQLSubscriptionOperation<R: Decodable> = AmplifyOperation<
     GraphQLOperationRequest<R>,
-    SubscriptionEvent<GraphQLResponse<R>>,
     Void,
     APIError>
 

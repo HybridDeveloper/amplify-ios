@@ -7,8 +7,9 @@
 
 import Foundation
 
-public protocol StorageUploadFileOperation: AmplifyOperation<StorageUploadFileRequest, Progress,
-String, StorageError> {}
+// TODO: Figure out a progress publisher for this
+
+public protocol StorageUploadFileOperation: AmplifyOperation<StorageUploadFileRequest, String, StorageError> {}
 
 public extension HubPayload.EventName.Storage {
     /// eventName for HubPayloads emitted by this operation

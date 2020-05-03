@@ -15,8 +15,7 @@ import Foundation
 /// implementation of a `dispatch` method that sends a contextualized payload to the Hub.
 ///
 /// Pausable/resumable tasks that do not require Hub dispatching should use AsynchronousOperation instead.
-open class AmplifyOperation<Request: AmplifyOperationRequest, InProcess, Success,
-Failure: AmplifyError>: AsynchronousOperation {
+open class AmplifyOperation<Request: AmplifyOperationRequest, Success, Failure: AmplifyError>: AsynchronousOperation {
 
     /// The concrete Request associated with this operation
     public typealias Request = Request
@@ -172,11 +171,9 @@ public extension HubCategory {
     /// - Parameter operation: The operation to listen to events for
     /// - Parameter listener: The Operation-specific listener callback to be invoked when an AsyncEvent for that
     ///   operation is received.
-    func listen<Request: AmplifyOperationRequest,
-        InProcess,
-        Completed,
-        Error: AmplifyError>(to operation: AmplifyOperation<Request, InProcess, Completed, Error>,
-                             listener: @escaping AmplifyOperation<Request, InProcess, Completed, Error>.ResultListener)
+    func listen<Request: AmplifyOperationRequest, Success, Failure: AmplifyError>(
+        to operation: AmplifyOperation<Request, Success, Failure>,
+        listener: @escaping AmplifyOperation<Request, Success, Failure>.ResultListener)
         -> UnsubscribeToken {
             return operation.subscribe(listener: listener)
     }
