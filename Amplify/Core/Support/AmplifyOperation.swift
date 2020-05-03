@@ -44,8 +44,8 @@ open class AmplifyOperation<Request: AmplifyOperationRequest, Success, Failure: 
     ///   See `HubPayload.EventName` for a list of pre-defined event names.
     /// - **`context`**: An `AmplifyOperationContext` whose `operationId` will be the ID of this operation, and whose
     ///   `request` will be the Request used to create the operation.
-    /// - **`data`**: The `AsyncEvent` that will be dispatched to an event listener. Event types for the listener are
-    ///   derived from the request.
+    /// - **`data`**: The `OperationResult` that will be dispatched to an event listener. Event types for the listener
+    ///   are derived from the request.
     ///
     /// A caller may specify a listener during a call to an
     /// Amplify category API:
@@ -60,7 +60,8 @@ open class AmplifyOperation<Request: AmplifyOperationRequest, Success, Failure: 
     ///
     /// In either of these cases, Amplify creates a HubListener for the operation by:
     /// 1. Filtering messages by the operation's ID
-    /// 1. Extracting the HubPayload's `data` element and casts it to the expected `AmplifyResult` type for the listener
+    /// 1. Extracting the HubPayload's `data` element and casts it to the expected `OperationResult` type for the
+    ///    listener
     /// 1. Automatically unsubscribing the listener (by calling `Amplify.Hub.removeListener`) when the listener receives
     ///    a result
     ///
@@ -69,7 +70,7 @@ open class AmplifyOperation<Request: AmplifyOperationRequest, Success, Failure: 
     /// - Parameter categoryType: The categoryType of this operation
     /// - Parameter eventName: The event name of this operation, used in HubPayload messages dispatched by the operation
     /// - Parameter request: The request used to generate this operation
-    /// - Parameter listener: The optional listener for the AsyncEvents associated with the operation
+    /// - Parameter listener: The optional listener for the OperationResults associated with the operation
     public init(categoryType: CategoryType,
                 eventName: HubPayloadEventName,
                 request: Request,
@@ -128,7 +129,7 @@ extension AmplifyOperation: HubPayloadEventNameable { }
 extension AmplifyOperation: Cancellable { }
 
 public extension AmplifyOperation {
-    /// Convenience typealias defining the AsyncEvents dispatched by this operation
+    /// Convenience typealias defining the `Result`s dispatched by this operation
     typealias OperationResult = Result<Success, Failure>
 
     /// Convenience typealias for the `listener` callback submitted during Operation creation
@@ -136,7 +137,7 @@ public extension AmplifyOperation {
 
     /// Dispatches an event to the hub. Internally, creates an `AmplifyOperationContext` object from the
     /// operation's `id`, and `request`
-    /// - Parameter event: The AsyncEvent to dispatch to the hub as part of the HubPayload
+    /// - Parameter result: The OperationResult to dispatch to the hub as part of the HubPayload
     func dispatch(result: OperationResult) {
         let channel = HubChannel(from: categoryType)
         let context = AmplifyOperationContext(operationId: id, request: request)

@@ -7,5 +7,5 @@
 
 import Foundation
 
-/// Convenience typealias for a callback invoked with the progress of an asynchronous operation
+/// Convenience typealias for a callback invoked with an asynchronous operation's `Progress`
 public typealias ProgressListener = (Progress) -> Void

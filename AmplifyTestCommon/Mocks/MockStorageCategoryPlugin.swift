@@ -120,6 +120,7 @@ StorageGetURLOperation {
 
 class MockStorageDownloadDataOperation: AmplifyProgressReportingOperation<
     StorageDownloadDataRequest,
+    Progress,
     Data,
     StorageError
 >, StorageDownloadDataOperation {
@@ -138,6 +139,7 @@ class MockStorageDownloadDataOperation: AmplifyProgressReportingOperation<
 
 class MockStorageDownloadFileOperation: AmplifyProgressReportingOperation<
     StorageDownloadFileRequest,
+    Progress,
     Void,
     StorageError
 >, StorageDownloadFileOperation {
@@ -156,6 +158,7 @@ class MockStorageDownloadFileOperation: AmplifyProgressReportingOperation<
 
 class MockStorageUploadDataOperation: AmplifyProgressReportingOperation<
     StorageUploadDataRequest,
+    Progress,
     String,
     StorageError
 >, StorageUploadDataOperation {
@@ -174,6 +177,7 @@ class MockStorageUploadDataOperation: AmplifyProgressReportingOperation<
 
 class MockStorageUploadFileOperation: AmplifyProgressReportingOperation<
     StorageUploadFileRequest,
+    Progress,
     String,
     StorageError
 >, StorageUploadFileOperation {

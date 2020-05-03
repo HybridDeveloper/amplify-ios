@@ -18,6 +18,7 @@ import Foundation
 /// - Error: `StorageError` - Emitted if the download encounters an error.
 public protocol StorageDownloadFileOperation: AmplifyProgressReportingOperation<
     StorageDownloadFileRequest,
+    Progress,
     Void,
     StorageError
 > { }

@@ -138,8 +138,8 @@ class MockDispatchingStoragePlugin: StorageCategoryPlugin {
         let request = StorageDownloadDataRequest(key: key, options: options)
 
         let operation = MockDispatchingStorageDownloadDataOperation(request: request,
-                                                                    resultListener: resultListener,
-                                                                    progressListener: progressListener)
+                                                                    progressListener: progressListener,
+                                                                    resultListener: resultListener)
         return operation
     }
 
@@ -154,8 +154,8 @@ class MockDispatchingStoragePlugin: StorageCategoryPlugin {
             let request = StorageDownloadFileRequest(key: key, local: local, options: options)
 
             let operation = MockDispatchingStorageDownloadFileOperation(request: request,
-                                                                        resultListener: resultListener,
-                                                                        progressListener: progressListener)
+                                                                        progressListener: progressListener,
+                                                                        resultListener: resultListener)
             return operation
     }
 
@@ -170,8 +170,8 @@ class MockDispatchingStoragePlugin: StorageCategoryPlugin {
         let request = StorageUploadDataRequest(key: key, data: data, options: options)
 
         let operation = MockDispatchingStorageUploadDataOperation(request: request,
-                                                                  resultListener: resultListener,
-                                                                  progressListener: progressListener)
+                                                                  progressListener: progressListener,
+                                                                  resultListener: resultListener)
         return operation
     }
 
@@ -186,8 +186,8 @@ class MockDispatchingStoragePlugin: StorageCategoryPlugin {
         let request = StorageUploadFileRequest(key: key, local: local, options: options)
 
         let operation = MockDispatchingStorageUploadFileOperation(request: request,
-                                                                  resultListener: resultListener,
-                                                                  progressListener: progressListener)
+                                                                  progressListener: progressListener,
+                                                                  resultListener: resultListener)
         return operation
     }
 
@@ -222,15 +222,16 @@ class MockDispatchingStoragePlugin: StorageCategoryPlugin {
 // swiftlint:disable:next type_name
 class MockDispatchingStorageDownloadFileOperation: AmplifyProgressReportingOperation<
     StorageDownloadFileRequest,
+    Progress,
     Void,
     StorageError
 >, StorageDownloadFileOperation {
-    init(request: Request, resultListener: ResultListener? = nil, progressListener: ProgressListener? = nil) {
+    init(request: Request, progressListener: ProgressListener? = nil, resultListener: ResultListener? = nil) {
         super.init(categoryType: .storage,
                    eventName: HubPayload.EventName.Storage.downloadFile,
                    request: request,
-                   resultListener: resultListener,
-                   progressListener: progressListener)
+                   inProcessListener: progressListener,
+                   resultListener: resultListener)
     }
 
     func doMockDispatch() {
@@ -239,22 +240,23 @@ class MockDispatchingStorageDownloadFileOperation: AmplifyProgressReportingOpera
 
     func doMockProgress() {
         let progress = Progress(totalUnitCount: 1)
-        progressListener?(progress)
+        inProcessListener?(progress)
     }
 }
 
 // swiftlint:disable:next type_name
 class MockDispatchingStorageDownloadDataOperation: AmplifyProgressReportingOperation<
     StorageDownloadDataRequest,
+    Progress,
     Data,
     StorageError
 >, StorageDownloadDataOperation {
-    init(request: Request, resultListener: ResultListener? = nil, progressListener: ProgressListener? = nil) {
+    init(request: Request, progressListener: ProgressListener? = nil, resultListener: ResultListener? = nil) {
         super.init(categoryType: .storage,
                    eventName: HubPayload.EventName.Storage.downloadData,
                    request: request,
-                   resultListener: resultListener,
-                   progressListener: progressListener)
+                   inProcessListener: progressListener,
+                   resultListener: resultListener)
     }
 
     func doMockDispatch(result: StorageDownloadDataOperation.OperationResult = .success(Data())) {
@@ -263,7 +265,7 @@ class MockDispatchingStorageDownloadDataOperation: AmplifyProgressReportingOpera
 
     func doMockProgress() {
         let progress = Progress(totalUnitCount: 1)
-        progressListener?(progress)
+        inProcessListener?(progress)
     }
 }
 
@@ -321,15 +323,16 @@ class MockDispatchingStorageRemoveOperation: AmplifyOperation<
 // swiftlint:disable:next type_name
 class MockDispatchingStorageUploadDataOperation: AmplifyProgressReportingOperation<
     StorageUploadDataRequest,
+    Progress,
     String,
     StorageError
 >, StorageUploadDataOperation {
-    init(request: Request, resultListener: ResultListener? = nil, progressListener: ProgressListener? = nil) {
+    init(request: Request, progressListener: ProgressListener? = nil, resultListener: ResultListener? = nil) {
         super.init(categoryType: .storage,
                    eventName: HubPayload.EventName.Storage.uploadData,
                    request: request,
-                   resultListener: resultListener,
-                   progressListener: progressListener)
+                   inProcessListener: progressListener,
+                   resultListener: resultListener)
     }
 
     func doMockDispatch() {
@@ -338,22 +341,23 @@ class MockDispatchingStorageUploadDataOperation: AmplifyProgressReportingOperati
 
     func doMockProgress() {
         let progress = Progress(totalUnitCount: 1)
-        progressListener?(progress)
+        inProcessListener?(progress)
     }
 }
 
 // swiftlint:disable:next type_name
 class MockDispatchingStorageUploadFileOperation: AmplifyProgressReportingOperation<
     StorageUploadFileRequest,
+    Progress,
     String,
     StorageError
 >, StorageUploadFileOperation {
-    init(request: Request, resultListener: ResultListener? = nil, progressListener: ProgressListener? = nil) {
+    init(request: Request, progressListener: ProgressListener? = nil, resultListener: ResultListener? = nil) {
         super.init(categoryType: .storage,
                    eventName: HubPayload.EventName.Storage.uploadFile,
                    request: request,
-                   resultListener: resultListener,
-                   progressListener: progressListener)
+                   inProcessListener: progressListener,
+                   resultListener: resultListener)
     }
 
     func doMockDispatch() {
@@ -362,7 +366,7 @@ class MockDispatchingStorageUploadFileOperation: AmplifyProgressReportingOperati
 
     func doMockProgress() {
         let progress = Progress(totalUnitCount: 1)
-        progressListener?(progress)
+        inProcessListener?(progress)
     }
 }
 
