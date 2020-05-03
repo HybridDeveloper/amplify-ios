@@ -51,11 +51,13 @@ public protocol APICategoryGraphQLBehavior: class {
     /// - Parameters:
     ///   - modelType: The type of items to be subscribed to
     ///   - type: The type of subscription for the items
-    ///   - listener: The event listener for the operation
-    /// - Returns: The AmplifyOperation being enqueued.
+    ///   - valueListener: Invoked when the GraphQL subscription receives a new value from the service
+    ///   - completionListener: Invoked when the subscription has terminated
+    /// - Returns: The AmplifyInProcessReportingOperation being enqueued.
     func subscribe<M: Model>(from modelType: M.Type,
                              type: GraphQLSubscriptionType,
-                             listener: GraphQLSubscriptionOperation<M>.ResultListener?)
+                             valueListener: GraphQLSubscriptionOperation<M>.InProcessListener?,
+                             completionListener: GraphQLSubscriptionOperation<M>.ResultListener?)
         -> GraphQLSubscriptionOperation<M>
 
     // MARK: - Request-based GraphQL Operations
@@ -85,9 +87,11 @@ public protocol APICategoryGraphQLBehavior: class {
     ///
     /// - Parameters:
     ///   - request: The GraphQL request containing apiName, document, variables, and responseType
-    ///   - listener: The event listener for the operation
-    /// - Returns: The AmplifyOperation being enqueued
+    ///   - valueListener: Invoked when the GraphQL subscription receives a new value from the service
+    ///   - completionListener: Invoked when the subscription has terminated
+    /// - Returns: The AmplifyInProcessReportingOperation being enqueued
     func subscribe<R: Decodable>(request: GraphQLRequest<R>,
-                                 listener: GraphQLSubscriptionOperation<R>.ResultListener?)
+                                 valueListener: GraphQLSubscriptionOperation<R>.InProcessListener?,
+                                 completionListener: GraphQLSubscriptionOperation<R>.ResultListener?)
         -> GraphQLSubscriptionOperation<R>
 }

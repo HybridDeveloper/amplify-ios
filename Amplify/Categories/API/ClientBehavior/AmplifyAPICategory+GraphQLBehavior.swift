@@ -29,9 +29,13 @@ extension AmplifyAPICategory: APICategoryGraphQLBehavior {
 
     public func subscribe<M: Model>(from modelType: M.Type,
                                     type: GraphQLSubscriptionType,
-                                    listener: GraphQLSubscriptionOperation<M>.ResultListener?)
+                                    valueListener: GraphQLSubscriptionOperation<M>.InProcessListener?,
+                                    completionListener: GraphQLSubscriptionOperation<M>.ResultListener?)
         -> GraphQLSubscriptionOperation<M> {
-            plugin.subscribe(from: modelType, type: type, listener: listener)
+            plugin.subscribe(from: modelType,
+                             type: type,
+                             valueListener: valueListener,
+                             completionListener: completionListener)
     }
 
     // MARK: - Request-based GraphQL operations
@@ -47,8 +51,9 @@ extension AmplifyAPICategory: APICategoryGraphQLBehavior {
     }
 
     public func subscribe<R>(request: GraphQLRequest<R>,
-                             listener: GraphQLSubscriptionOperation<R>.ResultListener?)
+                             valueListener: GraphQLSubscriptionOperation<R>.InProcessListener?,
+                             completionListener: GraphQLSubscriptionOperation<R>.ResultListener?)
         -> GraphQLSubscriptionOperation<R> {
-            plugin.subscribe(request: request, listener: listener)
+            plugin.subscribe(request: request, valueListener: valueListener, completionListener: completionListener)
     }
 }

@@ -220,7 +220,7 @@ class MockDispatchingStoragePlugin: StorageCategoryPlugin {
 }
 
 // swiftlint:disable:next type_name
-class MockDispatchingStorageDownloadFileOperation: AmplifyProgressReportingOperation<
+class MockDispatchingStorageDownloadFileOperation: AmplifyInProcessReportingOperation<
     StorageDownloadFileRequest,
     Progress,
     Void,
@@ -245,7 +245,7 @@ class MockDispatchingStorageDownloadFileOperation: AmplifyProgressReportingOpera
 }
 
 // swiftlint:disable:next type_name
-class MockDispatchingStorageDownloadDataOperation: AmplifyProgressReportingOperation<
+class MockDispatchingStorageDownloadDataOperation: AmplifyInProcessReportingOperation<
     StorageDownloadDataRequest,
     Progress,
     Data,
@@ -321,7 +321,7 @@ class MockDispatchingStorageRemoveOperation: AmplifyOperation<
 }
 
 // swiftlint:disable:next type_name
-class MockDispatchingStorageUploadDataOperation: AmplifyProgressReportingOperation<
+class MockDispatchingStorageUploadDataOperation: AmplifyInProcessReportingOperation<
     StorageUploadDataRequest,
     Progress,
     String,
@@ -346,7 +346,7 @@ class MockDispatchingStorageUploadDataOperation: AmplifyProgressReportingOperati
 }
 
 // swiftlint:disable:next type_name
-class MockDispatchingStorageUploadFileOperation: AmplifyProgressReportingOperation<
+class MockDispatchingStorageUploadFileOperation: AmplifyInProcessReportingOperation<
     StorageUploadFileRequest,
     Progress,
     String,

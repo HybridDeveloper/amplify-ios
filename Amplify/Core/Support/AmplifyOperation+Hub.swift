@@ -33,8 +33,8 @@ public extension HubCategory {
     /// - Parameter resultListener: The Operation-specific listener callback to be invoked when an OperationResult for
     ///   that operation is received
     func listen<Request: AmplifyOperationRequest, InProcess, Success, Failure: AmplifyError>(
-        to operation: AmplifyProgressReportingOperation<Request, InProcess, Success, Failure>,
-        inProcessListener: AmplifyProgressReportingOperation<Request, InProcess, Success, Failure>.InProcessListener?,
+        to operation: AmplifyInProcessReportingOperation<Request, InProcess, Success, Failure>,
+        inProcessListener: AmplifyInProcessReportingOperation<Request, InProcess, Success, Failure>.InProcessListener?,
         resultListener: AmplifyOperation<Request, Success, Failure>.ResultListener?
     ) -> UnsubscribeToken {
             return operation.subscribe(inProcessListener: inProcessListener, resultListener: resultListener)

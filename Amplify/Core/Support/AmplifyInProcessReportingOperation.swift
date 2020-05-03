@@ -7,7 +7,13 @@
 
 import Foundation
 
-/// An AmplifyOperation that emits Progress events intermittently
+/// An AmplifyOperation that emits InProcess values intermittently during the operation.
+///
+/// Unlike a regular `AmplifyOperation`, which emits a single Result at the completion of the operation's work, an
+/// `AmplifyInProcessReportingOperation` may emit intermediate values while its work is ongoing. These values could be
+/// incidental to the operation (such as a `Storage.downloadFile` operation reporting Progress values periodically as
+/// the download proceeds), or they could be the primary delivery mechanism for an operation (such as a
+/// `GraphQLSubscriptionOperation`'s emitting new subscription values).
 open class AmplifyInProcessReportingOperation<
     Request: AmplifyOperationRequest,
     InProcess,

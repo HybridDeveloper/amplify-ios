@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol StorageDownloadDataOperation: AmplifyProgressReportingOperation<
+public protocol StorageDownloadDataOperation: AmplifyInProcessReportingOperation<
     StorageDownloadDataRequest,
     Progress,
     Data,

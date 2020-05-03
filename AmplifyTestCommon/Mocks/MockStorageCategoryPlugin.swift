@@ -118,7 +118,7 @@ StorageGetURLOperation {
     }
 }
 
-class MockStorageDownloadDataOperation: AmplifyProgressReportingOperation<
+class MockStorageDownloadDataOperation: AmplifyInProcessReportingOperation<
     StorageDownloadDataRequest,
     Progress,
     Data,
@@ -137,7 +137,7 @@ class MockStorageDownloadDataOperation: AmplifyProgressReportingOperation<
     }
 }
 
-class MockStorageDownloadFileOperation: AmplifyProgressReportingOperation<
+class MockStorageDownloadFileOperation: AmplifyInProcessReportingOperation<
     StorageDownloadFileRequest,
     Progress,
     Void,
@@ -156,7 +156,7 @@ class MockStorageDownloadFileOperation: AmplifyProgressReportingOperation<
     }
 }
 
-class MockStorageUploadDataOperation: AmplifyProgressReportingOperation<
+class MockStorageUploadDataOperation: AmplifyInProcessReportingOperation<
     StorageUploadDataRequest,
     Progress,
     String,
@@ -175,7 +175,7 @@ class MockStorageUploadDataOperation: AmplifyProgressReportingOperation<
     }
 }
 
-class MockStorageUploadFileOperation: AmplifyProgressReportingOperation<
+class MockStorageUploadFileOperation: AmplifyInProcessReportingOperation<
     StorageUploadFileRequest,
     Progress,
     String,

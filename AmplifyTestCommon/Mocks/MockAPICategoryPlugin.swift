@@ -73,9 +73,11 @@ class MockAPICategoryPlugin: MessageReporter, APICategoryPlugin {
         return operation
     }
 
-    func subscribe<M>(from modelType: M.Type,
-                      type: GraphQLSubscriptionType,
-                      listener: GraphQLSubscriptionOperation<M>.ResultListener?) -> GraphQLSubscriptionOperation<M> {
+    func subscribe<M: Model>(from modelType: M.Type,
+                             type: GraphQLSubscriptionType,
+                             valueListener: GraphQLSubscriptionOperation<M>.InProcessListener?,
+                             completionListener: GraphQLSubscriptionOperation<M>.ResultListener?
+    ) -> GraphQLSubscriptionOperation<M> {
         notify("subscribe(from:\(modelType),type:\(type),listener:)")
 
         let options = GraphQLOperationRequest<M>.Options()
@@ -91,8 +93,9 @@ class MockAPICategoryPlugin: MessageReporter, APICategoryPlugin {
 
     func subscribe(toAnyModelType modelType: Model.Type,
                    subscriptionType: GraphQLSubscriptionType,
-                   listener: GraphQLSubscriptionOperation<AnyModel>.ResultListener?)
-        -> GraphQLSubscriptionOperation<AnyModel> {
+                   valueListener: GraphQLSubscriptionOperation<AnyModel>.InProcessListener?,
+                   completionListener: GraphQLSubscriptionOperation<AnyModel>.ResultListener?
+    ) -> GraphQLSubscriptionOperation<AnyModel> {
             notify("subscribe(toAnyModelType:\(modelType),subscriptionType:\(subscriptionType),listener:)")
             let options = GraphQLOperationRequest<AnyModel>.Options()
             let request = GraphQLOperationRequest<AnyModel>(apiName: nil,
@@ -103,6 +106,13 @@ class MockAPICategoryPlugin: MessageReporter, APICategoryPlugin {
                                                             options: options)
             let operation = MockSubscriptionGraphQLOperation(request: request, responseType: request.responseType)
             return operation
+    }
+
+    func subscribe<R: Decodable>(request: GraphQLRequest<R>,
+                                 valueListener: GraphQLSubscriptionOperation<R>.InProcessListener?,
+                                 completionListener: GraphQLSubscriptionOperation<R>.ResultListener?)
+        -> GraphQLSubscriptionOperation<R> {
+        fatalError("Not implemented")
     }
 
     // MARK: - Request-based GraphQL methods

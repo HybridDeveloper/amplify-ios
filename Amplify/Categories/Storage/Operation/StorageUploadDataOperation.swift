@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol StorageUploadDataOperation: AmplifyProgressReportingOperation<
+public protocol StorageUploadDataOperation: AmplifyInProcessReportingOperation<
     StorageUploadDataRequest,
     Progress,
     String,
