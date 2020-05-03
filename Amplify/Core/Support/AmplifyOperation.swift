@@ -74,7 +74,7 @@ Failure: AmplifyError>: AsynchronousOperation {
     public init(categoryType: CategoryType,
                 eventName: HubPayloadEventName,
                 request: Request,
-                listener: EventListener? = nil) {
+                listener: ResultListener? = nil) {
         self.categoryType = categoryType
         self.eventName = eventName
         self.request = request
@@ -87,28 +87,22 @@ Failure: AmplifyError>: AsynchronousOperation {
         }
     }
 
-    func subscribe(listener: @escaping EventListener) -> UnsubscribeToken {
+    func subscribe(listener: @escaping ResultListener) -> UnsubscribeToken {
         let channel = HubChannel(from: categoryType)
         let filterById = HubFilters.forOperation(self)
 
         var token: UnsubscribeToken?
         let hubListener: HubListener = { payload in
-            guard let event = payload.data as? Event else {
+            guard let result = payload.data as? AmplifyResult else {
                 return
             }
-            listener(event)
+            listener(result)
 
-            // Automatically unsubscribe for terminal events
+            // Automatically unsubscribe when event is received
             guard let token = token else {
                 return
             }
-
-            switch event {
-            case .completed, .failed:
-                Amplify.Hub.removeListener(token)
-            default:
-                break
-            }
+            Amplify.Hub.removeListener(token)
         }
 
         token = Amplify.Hub.listen(to: channel, isIncluded: filterById, listener: hubListener)
@@ -136,18 +130,18 @@ extension AmplifyOperation: Cancellable { }
 
 public extension AmplifyOperation {
     /// Convenience typealias defining the AsyncEvents dispatched by this operation
-    typealias Event = AsyncEvent<InProcess, Success, Failure>
+    typealias AmplifyResult = Result<Success, Failure>
 
     /// Convenience typealias for the `listener` callback submitted during Operation creation
-    typealias EventListener = (Event) -> Void
+    typealias ResultListener = (AmplifyResult) -> Void
 
     /// Dispatches an event to the hub. Internally, creates an `AmplifyOperationContext` object from the
     /// operation's `id`, and `request`
     /// - Parameter event: The AsyncEvent to dispatch to the hub as part of the HubPayload
-    func dispatch(event: Event) {
+    func dispatch(result: AmplifyResult) {
         let channel = HubChannel(from: categoryType)
         let context = AmplifyOperationContext(operationId: id, request: request)
-        let payload = HubPayload(eventName: eventName, context: context, data: event)
+        let payload = HubPayload(eventName: eventName, context: context, data: result)
         Amplify.Hub.dispatch(to: channel, payload: payload)
     }
 
@@ -182,7 +176,7 @@ public extension HubCategory {
         InProcess,
         Completed,
         Error: AmplifyError>(to operation: AmplifyOperation<Request, InProcess, Completed, Error>,
-                             listener: @escaping AmplifyOperation<Request, InProcess, Completed, Error>.EventListener)
+                             listener: @escaping AmplifyOperation<Request, InProcess, Completed, Error>.ResultListener)
         -> UnsubscribeToken {
             return operation.subscribe(listener: listener)
     }

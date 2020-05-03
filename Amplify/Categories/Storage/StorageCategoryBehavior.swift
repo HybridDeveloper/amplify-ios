@@ -18,7 +18,7 @@ public protocol StorageCategoryBehavior {
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func getURL(key: String,
                 options: StorageGetURLOperation.Request.Options?,
-                listener: StorageGetURLOperation.EventListener?) -> StorageGetURLOperation
+                listener: StorageGetURLOperation.ResultListener?) -> StorageGetURLOperation
 
     /// Retrieve the object from storage into memory.
     ///
@@ -29,7 +29,7 @@ public protocol StorageCategoryBehavior {
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func downloadData(key: String,
                       options: StorageDownloadDataOperation.Request.Options?,
-                      listener: StorageDownloadDataOperation.EventListener?) -> StorageDownloadDataOperation
+                      listener: StorageDownloadDataOperation.ResultListener?) -> StorageDownloadDataOperation
 
     /// Download to file the object from storage.
     ///
@@ -42,7 +42,7 @@ public protocol StorageCategoryBehavior {
     func downloadFile(key: String,
                       local: URL,
                       options: StorageDownloadFileOperation.Request.Options?,
-                      listener: StorageDownloadFileOperation.EventListener?) -> StorageDownloadFileOperation
+                      listener: StorageDownloadFileOperation.ResultListener?) -> StorageDownloadFileOperation
 
     /// Upload data to storage
     ///
@@ -55,7 +55,7 @@ public protocol StorageCategoryBehavior {
     func uploadData(key: String,
                     data: Data,
                     options: StorageUploadDataOperation.Request.Options?,
-                    listener: StorageUploadDataOperation.EventListener?) -> StorageUploadDataOperation
+                    listener: StorageUploadDataOperation.ResultListener?) -> StorageUploadDataOperation
 
     /// Upload local file to storage
     ///
@@ -68,7 +68,7 @@ public protocol StorageCategoryBehavior {
     func uploadFile(key: String,
                     local: URL,
                     options: StorageUploadFileOperation.Request.Options?,
-                    listener: StorageUploadFileOperation.EventListener?) -> StorageUploadFileOperation
+                    listener: StorageUploadFileOperation.ResultListener?) -> StorageUploadFileOperation
 
     /// Delete object from storage
     ///
@@ -79,7 +79,7 @@ public protocol StorageCategoryBehavior {
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func remove(key: String,
                 options: StorageRemoveOperation.Request.Options?,
-                listener: StorageRemoveOperation.EventListener?) -> StorageRemoveOperation
+                listener: StorageRemoveOperation.ResultListener?) -> StorageRemoveOperation
 
     /// List the object identifiers under the heiarchy specified by the path, relative to access level, from storage
     ///
@@ -88,5 +88,5 @@ public protocol StorageCategoryBehavior {
     ///   - listener: Triggered when event occurs
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func list(options: StorageListOperation.Request.Options?,
-              listener: StorageListOperation.EventListener?) -> StorageListOperation
+              listener: StorageListOperation.ResultListener?) -> StorageListOperation
 }

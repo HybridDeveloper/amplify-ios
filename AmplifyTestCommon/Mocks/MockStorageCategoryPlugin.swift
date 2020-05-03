@@ -12,7 +12,7 @@ class MockStorageCategoryPlugin: MessageReporter, StorageCategoryPlugin {
 
     func getURL(key: String,
                 options: StorageGetURLRequest.Options?,
-                listener: StorageGetURLOperation.EventListener?) -> StorageGetURLOperation {
+                listener: StorageGetURLOperation.ResultListener?) -> StorageGetURLOperation {
         notify("getURL")
         let options = options ?? StorageGetURLRequest.Options()
         let request = StorageGetURLRequest(key: key, options: options)
@@ -21,7 +21,7 @@ class MockStorageCategoryPlugin: MessageReporter, StorageCategoryPlugin {
 
     func downloadData(key: String,
                       options: StorageDownloadDataRequest.Options?,
-                      listener: StorageDownloadDataOperation.EventListener?)
+                      listener: StorageDownloadDataOperation.ResultListener?)
         -> StorageDownloadDataOperation {
         notify("downloadData")
             let options = options ?? StorageDownloadDataRequest.Options()
@@ -32,7 +32,7 @@ class MockStorageCategoryPlugin: MessageReporter, StorageCategoryPlugin {
     func downloadFile(key: String,
                       local: URL,
                       options: StorageDownloadFileRequest.Options?,
-                      listener: StorageDownloadFileOperation.EventListener?)
+                      listener: StorageDownloadFileOperation.ResultListener?)
         -> StorageDownloadFileOperation {
         notify("downloadFile")
             let options = options ?? StorageDownloadFileRequest.Options()
@@ -43,7 +43,7 @@ class MockStorageCategoryPlugin: MessageReporter, StorageCategoryPlugin {
     func uploadData(key: String,
                     data: Data,
                     options: StorageUploadDataRequest.Options?,
-                    listener: StorageUploadDataOperation.EventListener?) -> StorageUploadDataOperation {
+                    listener: StorageUploadDataOperation.ResultListener?) -> StorageUploadDataOperation {
         notify("uploadData")
         let options = options ?? StorageUploadDataRequest.Options()
         let request = StorageUploadDataRequest(key: key, data: data, options: options)
@@ -53,7 +53,7 @@ class MockStorageCategoryPlugin: MessageReporter, StorageCategoryPlugin {
     func uploadFile(key: String,
                     local: URL,
                     options: StorageUploadFileRequest.Options?,
-                    listener: StorageUploadFileOperation.EventListener?) -> StorageUploadFileOperation {
+                    listener: StorageUploadFileOperation.ResultListener?) -> StorageUploadFileOperation {
         notify("uploadFile")
         let options = options ?? StorageUploadFileRequest.Options()
         let request = StorageUploadFileRequest(key: key, local: local, options: options)
@@ -62,7 +62,7 @@ class MockStorageCategoryPlugin: MessageReporter, StorageCategoryPlugin {
 
     func remove(key: String,
                 options: StorageRemoveRequest.Options?,
-                listener: StorageRemoveOperation.EventListener?) -> StorageRemoveOperation {
+                listener: StorageRemoveOperation.ResultListener?) -> StorageRemoveOperation {
         notify("remove")
         let options = options ?? StorageRemoveRequest.Options()
         let request = StorageRemoveRequest(key: key, options: options)
@@ -70,7 +70,7 @@ class MockStorageCategoryPlugin: MessageReporter, StorageCategoryPlugin {
     }
 
     func list(options: StorageListRequest.Options?,
-              listener: StorageListOperation.EventListener?) -> StorageListOperation {
+              listener: StorageListOperation.ResultListener?) -> StorageListOperation {
         notify("list")
         let options = options ?? StorageListRequest.Options()
         let request = StorageListRequest(options: options)
