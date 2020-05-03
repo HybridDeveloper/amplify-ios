@@ -15,8 +15,8 @@ import Foundation
 /// implementation of a `dispatch` method that sends a contextualized payload to the Hub.
 ///
 /// Pausable/resumable tasks that do not require Hub dispatching should use AsynchronousOperation instead.
-open class AmplifyOperation<Request: AmplifyOperationRequest, InProcess, Completed,
-Error: AmplifyError>: AsynchronousOperation {
+open class AmplifyOperation<Request: AmplifyOperationRequest, InProcess, Success,
+Failure: AmplifyError>: AsynchronousOperation {
 
     /// The concrete Request associated with this operation
     public typealias Request = Request
@@ -136,7 +136,7 @@ extension AmplifyOperation: Cancellable { }
 
 public extension AmplifyOperation {
     /// Convenience typealias defining the AsyncEvents dispatched by this operation
-    typealias Event = AsyncEvent<InProcess, Completed, Error>
+    typealias Event = AsyncEvent<InProcess, Success, Failure>
 
     /// Convenience typealias for the `listener` callback submitted during Operation creation
     typealias EventListener = (Event) -> Void
