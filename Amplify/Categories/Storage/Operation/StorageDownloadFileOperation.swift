@@ -7,8 +7,6 @@
 
 import Foundation
 
-// TODO: Figure out a progress publisher for this
-
 /// This operation encapsulates work to download an object from cloud storage to local storage.
 ///
 /// ## Event descriptions
@@ -18,7 +16,11 @@ import Foundation
 /// - Completed: `Void` - Receipt of a `.completed` event indicates the download is complete and the file has been
 ///   successfully stored to the local URL supplied in the original `StorageDownloadFileRequest`
 /// - Error: `StorageError` - Emitted if the download encounters an error.
-public protocol StorageDownloadFileOperation: AmplifyOperation<StorageDownloadFileRequest, Void, StorageError> { }
+public protocol StorageDownloadFileOperation: AmplifyProgressReportingOperation<
+    StorageDownloadFileRequest,
+    Void,
+    StorageError
+> { }
 
 public extension HubPayload.EventName.Storage {
     /// eventName for HubPayloads emitted by this operation

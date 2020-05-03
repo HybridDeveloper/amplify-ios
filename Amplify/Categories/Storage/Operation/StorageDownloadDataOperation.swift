@@ -7,9 +7,11 @@
 
 import Foundation
 
-// TODO: Figure out a progress publisher for this
-
-public protocol StorageDownloadDataOperation: AmplifyOperation<StorageDownloadDataRequest, Data, StorageError> {}
+public protocol StorageDownloadDataOperation: AmplifyProgressReportingOperation<
+    StorageDownloadDataRequest,
+    Data,
+    StorageError
+> {}
 
 public extension HubPayload.EventName.Storage {
     /// eventName for HubPayloads emitted by this operation

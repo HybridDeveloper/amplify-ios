@@ -18,7 +18,7 @@ public protocol StorageCategoryBehavior {
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func getURL(key: String,
                 options: StorageGetURLOperation.Request.Options?,
-                listener: StorageGetURLOperation.ResultListener?) -> StorageGetURLOperation
+                resultListener: StorageGetURLOperation.ResultListener?) -> StorageGetURLOperation
 
     /// Retrieve the object from storage into memory.
     ///
@@ -26,10 +26,12 @@ public protocol StorageCategoryBehavior {
     ///   - key: The unique identifier for the object in storage
     ///   - options: Options to adjust the behavior of this request, including plugin-options
     ///   - listener: Triggered when event occurs
+    ///   - progressListener: Triggered intermittently to represent the ongoing progress of this operation
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func downloadData(key: String,
                       options: StorageDownloadDataOperation.Request.Options?,
-                      listener: StorageDownloadDataOperation.ResultListener?) -> StorageDownloadDataOperation
+                      progressListener: ProgressListener?,
+                      resultListener: StorageDownloadDataOperation.ResultListener?) -> StorageDownloadDataOperation
 
     /// Download to file the object from storage.
     ///
@@ -38,11 +40,13 @@ public protocol StorageCategoryBehavior {
     ///   - local: The local file to download the object to.
     ///   - options: Parameters to specific plugin behavior
     ///   - listener: Triggered when event occurs
+    ///   - progressListener: Triggered intermittently to represent the ongoing progress of this operation
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func downloadFile(key: String,
                       local: URL,
                       options: StorageDownloadFileOperation.Request.Options?,
-                      listener: StorageDownloadFileOperation.ResultListener?) -> StorageDownloadFileOperation
+                      progressListener: ProgressListener?,
+                      resultListener: StorageDownloadFileOperation.ResultListener?) -> StorageDownloadFileOperation
 
     /// Upload data to storage
     ///
@@ -51,11 +55,13 @@ public protocol StorageCategoryBehavior {
     ///   - data: The data in memory to be uploaded
     ///   - options: Parameters to specific plugin behavior
     ///   - listener: Triggered when event occurs
+    ///   - progressListener: Triggered intermittently to represent the ongoing progress of this operation
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func uploadData(key: String,
                     data: Data,
                     options: StorageUploadDataOperation.Request.Options?,
-                    listener: StorageUploadDataOperation.ResultListener?) -> StorageUploadDataOperation
+                    progressListener: ProgressListener?,
+                    resultListener: StorageUploadDataOperation.ResultListener?) -> StorageUploadDataOperation
 
     /// Upload local file to storage
     ///
@@ -64,11 +70,13 @@ public protocol StorageCategoryBehavior {
     ///   - local: The path to a local file.
     ///   - options: Parameters to specific plugin behavior
     ///   - listener: Triggered when event occurs
+    ///   - progressListener: Triggered intermittently to represent the ongoing progress of this operation
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func uploadFile(key: String,
                     local: URL,
                     options: StorageUploadFileOperation.Request.Options?,
-                    listener: StorageUploadFileOperation.ResultListener?) -> StorageUploadFileOperation
+                    progressListener: ProgressListener?,
+                    resultListener: StorageUploadFileOperation.ResultListener?) -> StorageUploadFileOperation
 
     /// Delete object from storage
     ///
@@ -79,7 +87,7 @@ public protocol StorageCategoryBehavior {
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func remove(key: String,
                 options: StorageRemoveOperation.Request.Options?,
-                listener: StorageRemoveOperation.ResultListener?) -> StorageRemoveOperation
+                resultListener: StorageRemoveOperation.ResultListener?) -> StorageRemoveOperation
 
     /// List the object identifiers under the heiarchy specified by the path, relative to access level, from storage
     ///
@@ -88,5 +96,5 @@ public protocol StorageCategoryBehavior {
     ///   - listener: Triggered when event occurs
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func list(options: StorageListOperation.Request.Options?,
-              listener: StorageListOperation.ResultListener?) -> StorageListOperation
+              resultListener: StorageListOperation.ResultListener?) -> StorageListOperation
 }

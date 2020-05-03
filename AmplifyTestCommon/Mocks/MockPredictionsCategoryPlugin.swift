@@ -40,7 +40,8 @@ class MockPredictionsCategoryPlugin: MessageReporter, PredictionsCategoryPlugin 
                  options: PredictionsSpeechToTextRequest.Options?,
                  listener: PredictionsSpeechToTextOperation.ResultListener?) -> PredictionsSpeechToTextOperation {
         notify("speechToText")
-        let request = PredictionsSpeechToTextRequest(speechToText: speechToText, options: options ?? PredictionsSpeechToTextRequest.Options())
+        let request = PredictionsSpeechToTextRequest(speechToText: speechToText,
+                                                     options: options ?? PredictionsSpeechToTextRequest.Options())
         return MockPredictionsSpeechToTextOperation(request: request)
 
     }
@@ -48,7 +49,7 @@ class MockPredictionsCategoryPlugin: MessageReporter, PredictionsCategoryPlugin 
     func identify(type: IdentifyAction,
                   image: URL,
                   options: PredictionsIdentifyRequest.Options?,
-                  listener: ((AsyncEvent<Void, IdentifyResult, PredictionsError>) -> Void)?)
+                  listener: PredictionsIdentifyOperation.ResultListener?)
         -> PredictionsIdentifyOperation {
 
             notify("identifyLabels")
@@ -84,10 +85,11 @@ class MockSecondPredictionsCategoryPlugin: MockPredictionsCategoryPlugin {
     }
 }
 
-class MockPredictionsTranslateTextOperation: AmplifyOperation<PredictionsTranslateTextRequest,
-    Void,
+class MockPredictionsTranslateTextOperation: AmplifyOperation<
+    PredictionsTranslateTextRequest,
     TranslateTextResult,
-PredictionsError>, PredictionsTranslateTextOperation {
+    PredictionsError
+>, PredictionsTranslateTextOperation {
 
     override func pause() {
     }
@@ -103,10 +105,11 @@ PredictionsError>, PredictionsTranslateTextOperation {
 
 }
 
-class MockPredictionsSpeechToTextOperation: AmplifyOperation<PredictionsSpeechToTextRequest,
-    Void,
+class MockPredictionsSpeechToTextOperation: AmplifyOperation<
+    PredictionsSpeechToTextRequest,
     SpeechToTextResult,
-PredictionsError>, PredictionsSpeechToTextOperation {
+    PredictionsError
+>, PredictionsSpeechToTextOperation {
 
     override func pause() {
     }
@@ -122,10 +125,11 @@ PredictionsError>, PredictionsSpeechToTextOperation {
 
 }
 
-class MockPredictionsIdentifyOperation: AmplifyOperation<PredictionsIdentifyRequest,
-    Void,
+class MockPredictionsIdentifyOperation: AmplifyOperation<
+    PredictionsIdentifyRequest,
     IdentifyResult,
-PredictionsError>, PredictionsIdentifyOperation {
+    PredictionsError
+>, PredictionsIdentifyOperation {
 
     override func pause() {
     }
@@ -141,10 +145,11 @@ PredictionsError>, PredictionsIdentifyOperation {
 
 }
 
-class MockPredictionsInterpretOperation: AmplifyOperation<PredictionsInterpretRequest,
-    Void,
+class MockPredictionsInterpretOperation: AmplifyOperation<
+    PredictionsInterpretRequest,
     InterpretResult,
-PredictionsError>, PredictionsInterpretOperation {
+    PredictionsError
+>, PredictionsInterpretOperation {
 
     override func pause() {
     }
@@ -159,3 +164,4 @@ PredictionsError>, PredictionsInterpretOperation {
     }
 
 }
+
