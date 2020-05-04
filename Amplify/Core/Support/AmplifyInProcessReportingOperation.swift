@@ -34,41 +34,38 @@ open class AmplifyInProcessReportingOperation<
         // If the inProcessListener is present, we need to register a hub event listener for it, and ensure we
         // automatically unsubscribe when we receive a completion event for the operation
         if let inProcessListener = inProcessListener {
-            let inProcessToken = subscribe(inProcessListener: inProcessListener)
-            self.inProcessListenerUnsubscribeToken = inProcessToken
-            self.secondaryResultListenerToken = removeListenerUponCompletion(listenerToken: inProcessToken)
+            self.inProcessListenerUnsubscribeToken = subscribe(inProcessListener: inProcessListener)
         }
     }
 
-    // Provide a handle for Hub.listen() to register progress and result listeners
+    /// Registers an in-process listener for this operation. If the operation completes, this listener will
+    /// automatically be removed.
+    ///
+    /// - Parameter inProcessListener: The listener for in-process events
+    /// - Returns: an UnsubscribeToken that can be used to remove the listener from Hub
     func subscribe(inProcessListener: @escaping InProcessListener) -> UnsubscribeToken {
         let channel = HubChannel(from: categoryType)
         let filterById = HubFilters.forOperation(self)
 
+        var progressListenerToken: UnsubscribeToken!
         let progressHubListener: HubListener = { payload in
-            guard let inProcessData = payload.data as? InProcess else {
+            if let inProcessData = payload.data as? InProcess {
+                inProcessListener(inProcessData)
                 return
             }
-            inProcessListener(inProcessData)
+            // Remove listener if we see a result come through
+            if payload.data is OperationResult {
+                Amplify.Hub.removeListener(progressListenerToken)
+            }
         }
 
-        let progressListenerToken = Amplify.Hub.listen(to: channel,
-                                                       isIncluded: filterById,
-                                                       listener: progressHubListener)
-
-        _ = removeListenerUponCompletion(listenerToken: progressListenerToken)
+        progressListenerToken = Amplify.Hub.listen(to: channel,
+                                                   isIncluded: filterById,
+                                                   listener: progressHubListener)
 
         return progressListenerToken
     }
 
-    private func removeListenerUponCompletion(listenerToken: UnsubscribeToken) -> UnsubscribeToken {
-        var removerToken: UnsubscribeToken!
-        removerToken = Amplify.Hub.listenForResult(to: self) { _ in
-            Amplify.Hub.removeListener(listenerToken)
-            Amplify.Hub.removeListener(removerToken)
-        }
-        return removerToken
-    }
 }
 
 public extension AmplifyInProcessReportingOperation {
