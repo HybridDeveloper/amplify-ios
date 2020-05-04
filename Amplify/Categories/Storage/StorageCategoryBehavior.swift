@@ -14,7 +14,7 @@ public protocol StorageCategoryBehavior {
     /// - Parameters:
     ///   - key: The unique identifier for the object in storage.
     ///   - options: Parameters to specific plugin behavior
-    ///   - listener: Triggered when event occurs
+    ///   - resultListener: Triggered when the operation is complete
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func getURL(key: String,
                 options: StorageGetURLOperation.Request.Options?,
@@ -25,8 +25,8 @@ public protocol StorageCategoryBehavior {
     /// - Parameters:
     ///   - key: The unique identifier for the object in storage
     ///   - options: Options to adjust the behavior of this request, including plugin-options
-    ///   - listener: Triggered when event occurs
     ///   - progressListener: Triggered intermittently to represent the ongoing progress of this operation
+    ///   - resultListener: Triggered when the download is complete
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func downloadData(key: String,
                       options: StorageDownloadDataOperation.Request.Options?,
@@ -39,8 +39,8 @@ public protocol StorageCategoryBehavior {
     ///   - key: The unique identifier for the object in storage.
     ///   - local: The local file to download the object to.
     ///   - options: Parameters to specific plugin behavior
-    ///   - listener: Triggered when event occurs
     ///   - progressListener: Triggered intermittently to represent the ongoing progress of this operation
+    ///   - resultListener: Triggered when the download is complete
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func downloadFile(key: String,
                       local: URL,
@@ -54,8 +54,8 @@ public protocol StorageCategoryBehavior {
     ///   - key: The unique identifier of the object in storage.
     ///   - data: The data in memory to be uploaded
     ///   - options: Parameters to specific plugin behavior
-    ///   - listener: Triggered when event occurs
     ///   - progressListener: Triggered intermittently to represent the ongoing progress of this operation
+    ///   - resultListener: Triggered when the upload is complete
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func uploadData(key: String,
                     data: Data,
@@ -69,8 +69,8 @@ public protocol StorageCategoryBehavior {
     ///   - key: The unique identifier of the object in storage.
     ///   - local: The path to a local file.
     ///   - options: Parameters to specific plugin behavior
-    ///   - listener: Triggered when event occurs
     ///   - progressListener: Triggered intermittently to represent the ongoing progress of this operation
+    ///   - resultListener: Triggered when the upload is complete
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func uploadFile(key: String,
                     local: URL,
@@ -83,7 +83,7 @@ public protocol StorageCategoryBehavior {
     /// - Parameters:
     ///   - key: The unique identifier of the object in storage.
     ///   - options: Parameters to specific plugin behavior
-    ///   - listener: Triggered when event occurs
+    ///   - resultListener: Triggered when the remove is complete
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func remove(key: String,
                 options: StorageRemoveOperation.Request.Options?,
@@ -93,7 +93,7 @@ public protocol StorageCategoryBehavior {
     ///
     /// - Parameters:
     ///   - options: Parameters to specific plugin behavior
-    ///   - listener: Triggered when event occurs
+    ///   - resultListener: Triggered when the list is complete
     /// - Returns: An operation object that provides notifications and actions related to the execution of the work
     func list(options: StorageListOperation.Request.Options?,
               resultListener: StorageListOperation.ResultListener?) -> StorageListOperation
