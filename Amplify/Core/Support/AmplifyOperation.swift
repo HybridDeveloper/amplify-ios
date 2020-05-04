@@ -33,7 +33,7 @@ open class AmplifyOperation<Request: AmplifyOperationRequest, Success, Failure: 
     /// All AmplifyOperations must declare a HubPayloadEventName
     public let eventName: HubPayloadEventName
 
-    var resultListenerUnsubscribeToken: UnsubscribeToken?
+    private var resultListenerUnsubscribeToken: UnsubscribeToken?
 
     /// Creates an AmplifyOperation for the specified reequest.
     ///
