@@ -40,11 +40,9 @@ class AmplifyOperationHubTests: XCTestCase {
 
         let listenerWasInvoked = expectation(description: "listener was invoked")
 
-        let listener: MockDispatchingStorageListOperation.ResultListener = { event in
+        let token = Amplify.Hub.listenForResult(to: operation) { event in
             listenerWasInvoked.fulfill()
         }
-
-        let token = Amplify.Hub.listen(to: operation, listener: listener)
 
         try waitForToken(token)
 
@@ -239,8 +237,7 @@ class MockDispatchingStorageDownloadFileOperation: AmplifyInProcessReportingOper
     }
 
     func doMockProgress() {
-        let progress = Progress(totalUnitCount: 1)
-        inProcessListener?(progress)
+        super.dispatchInProcess(data: Progress(totalUnitCount: 1))
     }
 }
 
@@ -264,8 +261,7 @@ class MockDispatchingStorageDownloadDataOperation: AmplifyInProcessReportingOper
     }
 
     func doMockProgress() {
-        let progress = Progress(totalUnitCount: 1)
-        inProcessListener?(progress)
+        super.dispatchInProcess(data: Progress(totalUnitCount: 1))
     }
 }
 
@@ -278,7 +274,7 @@ class MockDispatchingStorageGetURLOperation: AmplifyOperation<
         super.init(categoryType: .storage,
                    eventName: HubPayload.EventName.Storage.getURL,
                    request: request,
-                   listener: resultListener)
+                   resultListener: resultListener)
     }
 
     func doMockDispatch(result: StorageGetURLOperation.OperationResult = .success(URL(fileURLWithPath: "/path"))) {
@@ -295,7 +291,7 @@ class MockDispatchingStorageListOperation: AmplifyOperation<
         super.init(categoryType: .storage,
                    eventName: HubPayload.EventName.Storage.list,
                    request: request,
-                   listener: resultListener)
+                   resultListener: resultListener)
     }
 
     func doMockDispatch() {
@@ -312,7 +308,7 @@ class MockDispatchingStorageRemoveOperation: AmplifyOperation<
         super.init(categoryType: .storage,
                    eventName: HubPayload.EventName.Storage.remove,
                    request: request,
-                   listener: resultListener)
+                   resultListener: resultListener)
     }
 
     func doMockDispatch() {
@@ -340,8 +336,7 @@ class MockDispatchingStorageUploadDataOperation: AmplifyInProcessReportingOperat
     }
 
     func doMockProgress() {
-        let progress = Progress(totalUnitCount: 1)
-        inProcessListener?(progress)
+        super.dispatchInProcess(data: Progress(totalUnitCount: 1))
     }
 }
 
@@ -365,8 +360,7 @@ class MockDispatchingStorageUploadFileOperation: AmplifyInProcessReportingOperat
     }
 
     func doMockProgress() {
-        let progress = Progress(totalUnitCount: 1)
-        inProcessListener?(progress)
+        super.dispatchInProcess(data: Progress(totalUnitCount: 1))
     }
 }
 

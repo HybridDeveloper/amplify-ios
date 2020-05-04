@@ -33,7 +33,7 @@ open class AmplifyOperation<Request: AmplifyOperationRequest, Success, Failure: 
     /// All AmplifyOperations must declare a HubPayloadEventName
     public let eventName: HubPayloadEventName
 
-    var unsubscribeToken: UnsubscribeToken?
+    var resultListenerUnsubscribeToken: UnsubscribeToken?
 
     /// Creates an AmplifyOperation for the specified reequest.
     ///
@@ -65,16 +65,16 @@ open class AmplifyOperation<Request: AmplifyOperationRequest, Success, Failure: 
     /// 1. Automatically unsubscribing the listener (by calling `Amplify.Hub.removeListener`) when the listener receives
     ///    a result
     ///
-    /// Callers can remove the listener at any time by calling `operation.removeListener()`.
+    /// Callers can remove the listener at any time by calling `operation.removeResultListener()`.
     ///
     /// - Parameter categoryType: The categoryType of this operation
     /// - Parameter eventName: The event name of this operation, used in HubPayload messages dispatched by the operation
     /// - Parameter request: The request used to generate this operation
-    /// - Parameter listener: The optional listener for the OperationResults associated with the operation
+    /// - Parameter resultListener: The optional listener for the OperationResults associated with the operation
     public init(categoryType: CategoryType,
                 eventName: HubPayloadEventName,
                 request: Request,
-                listener: ResultListener? = nil) {
+                resultListener: ResultListener? = nil) {
         self.categoryType = categoryType
         self.eventName = eventName
         self.request = request
@@ -82,21 +82,22 @@ open class AmplifyOperation<Request: AmplifyOperationRequest, Success, Failure: 
 
         super.init()
 
-        if let listener = listener {
-            self.unsubscribeToken = subscribe(listener: listener)
+        if let resultListener = resultListener {
+            self.resultListenerUnsubscribeToken = subscribe(resultListener: resultListener)
         }
     }
 
-    func subscribe(listener: @escaping ResultListener) -> UnsubscribeToken {
+    func subscribe(resultListener: @escaping ResultListener) -> UnsubscribeToken {
         let channel = HubChannel(from: categoryType)
         let filterById = HubFilters.forOperation(self)
 
         var token: UnsubscribeToken?
-        let hubListener: HubListener = { payload in
+        let resultHubListener: HubListener = { payload in
             guard let result = payload.data as? OperationResult else {
                 return
             }
-            listener(result)
+
+            resultListener(result)
 
             // Automatically unsubscribe when event is received
             guard let token = token else {
@@ -105,7 +106,7 @@ open class AmplifyOperation<Request: AmplifyOperationRequest, Success, Failure: 
             Amplify.Hub.removeListener(token)
         }
 
-        token = Amplify.Hub.listen(to: channel, isIncluded: filterById, listener: hubListener)
+        token = Amplify.Hub.listen(to: channel, isIncluded: filterById, listener: resultHubListener)
 
         // We know that `token` is assigned by `Amplify.Hub.listen` so it's safe to force-unwrap
         return token!
@@ -146,8 +147,8 @@ public extension AmplifyOperation {
     }
 
     /// Removes the listener that was registered during operation instantiation
-    func removeListener() {
-        guard let unsubscribeToken = unsubscribeToken else {
+    func removeResultListener() {
+        guard let unsubscribeToken = resultListenerUnsubscribeToken else {
             return
         }
         Amplify.Hub.removeListener(unsubscribeToken)

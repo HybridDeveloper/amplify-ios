@@ -31,7 +31,7 @@ class AutoUnsubscribeHubListenToOperationTests: XCTestCase {
 
     /// - Given: An Amplify operation class
     /// - When: I pass an event listener with no other options to `Hub.listen(to:)`
-    /// - Then: The event listener is unsubscribed when it receives a terminal event (.completed)
+    /// - Then: The event listeners are unsubscribed when it receives a terminal event (.completed)
     func testHubListenToOperationUnsubscribesOnComplete() throws {
         let listenerWasInvokedForInProcess = expectation(description: "listener was invoked for in process event")
         listenerWasInvokedForInProcess.isInverted = true
@@ -41,11 +41,11 @@ class AutoUnsubscribeHubListenToOperationTests: XCTestCase {
         let listenerWasInvokedForFailed = expectation(description: "listener was invoked for failed event")
         listenerWasInvokedForFailed.isInverted = true
 
-        let progressListener: ProgressListener = { _ in listenerWasInvokedForInProcess.fulfill() }
-
         let amplifyOperation = Amplify.Storage.downloadData(key: "key", resultListener: nil)
 
-        _ = Amplify.Hub.listen(to: amplifyOperation, inProcessListener: progressListener) { result in
+        _ = Amplify.Hub.listenForInProcess(to: amplifyOperation) { _ in listenerWasInvokedForInProcess.fulfill() }
+
+        _ = Amplify.Hub.listenForResult(to: amplifyOperation) { result in
             switch result {
             case .success:
                 listenerWasInvokedForCompleted.fulfill()
@@ -79,11 +79,11 @@ class AutoUnsubscribeHubListenToOperationTests: XCTestCase {
 
         let listenerWasInvokedForFailed = expectation(description: "listener was invoked for failed event")
 
-        let progressListener: ProgressListener = { _ in listenerWasInvokedForInProcess.fulfill() }
-
         let amplifyOperation = Amplify.Storage.downloadData(key: "key", resultListener: nil)
 
-        _ = Amplify.Hub.listen(to: amplifyOperation, inProcessListener: progressListener) { result in
+        _ = Amplify.Hub.listenForInProcess(to: amplifyOperation) { _ in listenerWasInvokedForInProcess.fulfill() }
+
+        _ = Amplify.Hub.listenForResult(to: amplifyOperation) { result in
             switch result {
             case .success:
                 listenerWasInvokedForCompleted.fulfill()
@@ -117,11 +117,13 @@ class AutoUnsubscribeHubListenToOperationTests: XCTestCase {
         let listenerWasInvokedForFailed = expectation(description: "listener was invoked for failed event")
         listenerWasInvokedForFailed.isInverted = true
 
-        let progressListener: ProgressListener = { _ in listenerWasInvokedForInProcess.fulfill() }
-
         let amplifyOperation = Amplify.Storage.downloadData(key: "key", resultListener: nil)
 
-        let token = Amplify.Hub.listen(to: amplifyOperation, inProcessListener: progressListener) { result in
+        let inProcessToken = Amplify.Hub.listenForInProcess(to: amplifyOperation) { _ in
+            listenerWasInvokedForInProcess.fulfill()
+        }
+
+        let resultToken = Amplify.Hub.listenForResult(to: amplifyOperation) { result in
             switch result {
             case .success:
                 listenerWasInvokedForCompleted.fulfill()
@@ -135,7 +137,12 @@ class AutoUnsubscribeHubListenToOperationTests: XCTestCase {
             return
         }
 
-        guard try HubListenerTestUtilities.waitForListener(with: token, plugin: plugin, timeout: 1.0) else {
+        guard try HubListenerTestUtilities.waitForListener(with: inProcessToken, plugin: plugin, timeout: 1.0) else {
+            XCTFail("Listener not registered")
+            return
+        }
+
+        guard try HubListenerTestUtilities.waitForListener(with: resultToken, plugin: plugin, timeout: 1.0) else {
             XCTFail("Listener not registered")
             return
         }
@@ -166,11 +173,13 @@ class AutoUnsubscribeHubListenToOperationTests: XCTestCase {
 
         let listenerWasInvokedForFailed = expectation(description: "listener was invoked for failed event")
 
-        let progressListener: ProgressListener = { _ in listenerWasInvokedForInProcess.fulfill() }
-
         let amplifyOperation = Amplify.Storage.downloadData(key: "key", resultListener: nil)
 
-        let token = Amplify.Hub.listen(to: amplifyOperation, inProcessListener: progressListener) { result in
+        let inProcessToken = Amplify.Hub.listenForInProcess(to: amplifyOperation) { _ in
+            listenerWasInvokedForInProcess.fulfill()
+        }
+
+        let resultToken = Amplify.Hub.listenForResult(to: amplifyOperation) { result in
             switch result {
             case .success:
                 listenerWasInvokedForCompleted.fulfill()
@@ -184,7 +193,12 @@ class AutoUnsubscribeHubListenToOperationTests: XCTestCase {
             return
         }
 
-        guard try HubListenerTestUtilities.waitForListener(with: token, plugin: plugin, timeout: 1.0) else {
+        guard try HubListenerTestUtilities.waitForListener(with: inProcessToken, plugin: plugin, timeout: 1.0) else {
+            XCTFail("Listener not registered")
+            return
+        }
+
+        guard try HubListenerTestUtilities.waitForListener(with: resultToken, plugin: plugin, timeout: 1.0) else {
             XCTFail("Listener not registered")
             return
         }
