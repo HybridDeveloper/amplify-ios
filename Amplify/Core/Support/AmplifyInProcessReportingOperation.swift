@@ -47,23 +47,23 @@ open class AmplifyInProcessReportingOperation<
         let channel = HubChannel(from: categoryType)
         let filterById = HubFilters.forOperation(self)
 
-        var progressListenerToken: UnsubscribeToken!
-        let progressHubListener: HubListener = { payload in
+        var inProcessListenerToken: UnsubscribeToken!
+        let inProcessHubListener: HubListener = { payload in
             if let inProcessData = payload.data as? InProcess {
                 inProcessListener(inProcessData)
                 return
             }
             // Remove listener if we see a result come through
             if payload.data is OperationResult {
-                Amplify.Hub.removeListener(progressListenerToken)
+                Amplify.Hub.removeListener(inProcessListenerToken)
             }
         }
 
-        progressListenerToken = Amplify.Hub.listen(to: channel,
+        inProcessListenerToken = Amplify.Hub.listen(to: channel,
                                                    isIncluded: filterById,
-                                                   listener: progressHubListener)
+                                                   listener: inProcessHubListener)
 
-        return progressListenerToken
+        return inProcessListenerToken
     }
 
 }
