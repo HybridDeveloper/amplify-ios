@@ -27,7 +27,8 @@ extension AWSAuthPlugin {
             let configurationData =  try JSONEncoder().encode(jsonValueConfiguration)
             let authConfig = (try? JSONSerialization.jsonObject(with: configurationData, options: [])
                 as? [String: Any]) ?? [:]
-            let awsMobileClient = AWSMobileClientAdapter(configuration: authConfig)
+            AWSInfo.configureDefaultAWSInfo(authConfig)
+            let awsMobileClient = AWSMobileClientAdapter()
             try awsMobileClient.initialize()
             let authenticationProvider = AuthenticationProviderAdapter(awsMobileClient: awsMobileClient)
             let authorizationProvider = AuthorizationProviderAdapter(awsMobileClient: awsMobileClient)

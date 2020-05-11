@@ -13,4 +13,6 @@ protocol AuthorizationProviderBehavior {
                       completionHandler: @escaping (Result<AuthSession, AuthError>) -> Void)
 
     func invalidateCachedTemporaryCredentials()
+
+    func reset()
 }

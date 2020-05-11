@@ -10,7 +10,20 @@ import Amplify
 extension AWSAuthPlugin {
 
     public func reset(onComplete: @escaping BasicClosure) {
+
+        if authorizationProvider != nil {
+            authorizationProvider.reset()
+            authorizationProvider = nil
+        }
+        if authenticationProvider != nil {
+            authenticationProvider = nil
+        }
+        if userService != nil {
+            userService = nil
+        }
+        if deviceService != nil {
+            deviceService = nil
+        }
         onComplete()
-        // TODO: Verify whether we should recreate awsmobileclient #172336364
     }
 }
