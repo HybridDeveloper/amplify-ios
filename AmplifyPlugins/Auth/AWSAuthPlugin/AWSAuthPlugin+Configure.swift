@@ -20,7 +20,7 @@ extension AWSAuthPlugin {
     public func configure(using configuration: Any) throws {
         guard let jsonValueConfiguration = configuration as? JSONValue else {
             throw AuthError.configuration(AuthPluginErrorConstants.decodeConfigurationError.errorDescription,
-                                                 AuthPluginErrorConstants.decodeConfigurationError.recoverySuggestion)
+                                          AuthPluginErrorConstants.decodeConfigurationError.recoverySuggestion)
         }
         do {
             // Convert the JSONValue to [String: Any] dictionary to be used by AWSMobileClient
